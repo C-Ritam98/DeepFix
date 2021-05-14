@@ -5,8 +5,9 @@ import tensorflow as tf
 from tensorflow import keras
 import sys
 import pickle
+from train import NormaliseList
 
-
+'''
 def NormaliseList(Data,_name,Tokens):
     X = [] # empty list for tokenised code
     list_of_dictionaries = []
@@ -78,7 +79,7 @@ def NormaliseList(Data,_name,Tokens):
     return X,list_of_dictionaries
 
 
-
+'''
 
 def decode_sequence(input_seq,encoder_model,decoder_model,num_decoder_tokens,targetVocabulary):
     # Encode the input as state vectors.
