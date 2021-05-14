@@ -162,8 +162,7 @@ output_csv = sys.argv[2]
 
 Valid = pd.read_csv(valid_csv)
 
-codeToken = Valid['targetTokens'].values  #  tokenized correct code
-targetToken = list(codeToken)
+
 #print(codeToken)
 
 codeToken = Valid['sourceTokens'].values  # tokenized incorrect code
@@ -172,37 +171,26 @@ srcToken = list(codeToken)
 
 # Normalised code tokens
 X_val, dict_val_x = NormaliseList(Valid,"sourceLineTokens",srcToken)
-Y_val, dict_val_y = NormaliseList(Valid,"targetLineTokens",targetToken)
+#Y_val, dict_val_y = NormaliseList(Valid,"targetLineTokens",targetToken)
 
 
 Valid_X = []
-Valid_Y = []
+#Valid_Y = []
 embedding_length = 35
 for index,tokenList in enumerate(X_val):
     Valid_X.append(srcVocabulary.create_embedding(tokenList,embedding_length))
 
-for index,tokenList in enumerate(Y_val):
-    Valid_Y.append(targetVocabulary.create_embedding(tokenList,embedding_length))
     
     
 encoder_input_data = np.zeros(
     (len(Valid_X), max_encoder_seq_length, num_encoder_tokens), dtype="float32"
 )
-decoder_input_data = np.zeros(
-    (len(Valid_Y), max_decoder_seq_length, num_decoder_tokens), dtype="float32"
-)
-decoder_target_data = np.zeros(
-    (len(Valid_Y), max_decoder_seq_length, num_decoder_tokens), dtype="float32"
-)
 
-for i, (input_text, target_text) in enumerate(zip(Valid_X, Valid_Y)):
+
+for i, input_text in enumerate(Valid_X):
     for t, token in enumerate(input_text):
         encoder_input_data[i, t, token] = 1.0
-    #encoder_input_data[i, t + 1 :, input_token_index[" "]] = 1.0
-    for t, token in enumerate(target_text):
-    	decoder_input_data[i, t, token] = 1.0
-    	if t > 0:
-        	decoder_target_data[i, t - 1, token] = 1.0
+
         	
         	
 # Define sampling models
@@ -239,7 +227,7 @@ decoder_model = keras.Model(
 #writer = csv.writer(open(output_csv, 'wb'))
 #writer.writerow(["Unnamed:0","sourceText","targetText","sourceLineText","targetLineText","lineNums_Text","sourceTokens","targetTokns","sourceLineTokens","taretLineTokens","fixedTokens"])
     
-write_Back = [] 
+write_Back = []
 print("Prediction started!...")   
 for seq_index in range(len(Valid_X)):
     # Take one sequence (part of the training set)model = keras.models.load_model("s2s")
