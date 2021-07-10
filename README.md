@@ -1,2 +1,2 @@
-# Deep Fixing syntactically incorrect c programs.
+# Deep Fixing syntactically incorrect C programs.
 ## line to  line fixing
